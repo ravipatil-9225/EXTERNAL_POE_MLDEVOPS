@@ -97,22 +97,40 @@ mlflow ui --port 5001
 (Starts web server on port 5001)
 
 ------------------------------------------------------------------------------
-7. VIEWING SAVED EVIDENTLY REPORTS
+7. VIEWING SAVED EVIDENTLY REPORTS (ALL 7 DATASETS)
 ------------------------------------------------------------------------------
 # View files in reports folder on Windows:
 dir reports
 
-# Open the Irish Data Drift HTML report in default browser on Windows:
-start reports/irish_drift.html
+# Open any report directly in browser on Windows (or double click the file in File Explorer):
+start reports\irish_drift.html
+start reports\irish_performance.html
 
-# Open the Irish Model Performance HTML report in default browser on Windows:
-start reports/irish_performance.html
+start reports\healthcare_drift.html
+start reports\healthcare_performance.html
 
-# Open the Domain Data Drift HTML report in default browser on Windows:
-start reports/domain_drift.html
+start reports\agriculture_drift.html
+start reports\agriculture_performance.html
 
-# Open the Domain Model Performance HTML report in default browser on Windows:
-start reports/domain_performance.html
+start reports\insurance_drift.html
+start reports\insurance_performance.html
+
+start reports\banking_drift.html
+start reports\banking_performance.html
+
+start reports\fintech_drift.html
+start reports\fintech_performance.html
+
+start reports\time_series_drift.html
+start reports\time_series_performance.html
+
+# Command to re-generate reports for any specific dataset on demand:
+python -c "import sys; sys.path.insert(0, 'src'); from drift_report import run_and_log_reports; run_and_log_reports('healthcare')"
+python -c "import sys; sys.path.insert(0, 'src'); from drift_report import run_and_log_reports; run_and_log_reports('agriculture')"
+python -c "import sys; sys.path.insert(0, 'src'); from drift_report import run_and_log_reports; run_and_log_reports('insurance')"
+python -c "import sys; sys.path.insert(0, 'src'); from drift_report import run_and_log_reports; run_and_log_reports('banking')"
+python -c "import sys; sys.path.insert(0, 'src'); from drift_report import run_and_log_reports; run_and_log_reports('fintech')"
+python -c "import sys; sys.path.insert(0, 'src'); from drift_report import run_and_log_reports; run_and_log_reports('time_series')"
 
 ------------------------------------------------------------------------------
 8. TROUBLESHOOTING COMMON LAB ISSUES
