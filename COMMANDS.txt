@@ -1,0 +1,136 @@
+==============================================================================
+COMMANDS.txt - ML DEVOPS POE LAB PERFORMANCE COMMAND CHEAT SHEET
+==============================================================================
+This plain text file contains every command you need during your laboratory
+evaluation, in chronological order, with an explanation for each command.
+
+------------------------------------------------------------------------------
+1. SETUP AND VIRTUAL ENVIRONMENT
+------------------------------------------------------------------------------
+# Navigate to the project root directory:
+cd "c:\EXTERNAL POE MLDEVOPS\ml_devops_poe"
+
+# Activate the virtual environment on Windows (PowerShell):
+.\.venv\Scripts\Activate.ps1
+
+# Activate the virtual environment on Windows (Command Prompt):
+.\.venv\Scripts\activate.bat
+
+# Activate the virtual environment on Linux / macOS:
+source .venv/bin/activate
+
+# Install all pinned dependencies from requirements.txt:
+pip install -r requirements.txt
+(Installs exact pinned versions of mlflow, pytest, evidently, pandas, scikit-learn, numpy)
+
+# One-line sanity check to verify all imports work:
+python -c "import mlflow, pytest, evidently, pandas, sklearn, numpy; print('Environment OK!')"
+(Imports all core libraries and verifies no missing packages)
+
+------------------------------------------------------------------------------
+2. ONE-CLICK FULL PIPELINE EXECUTION
+------------------------------------------------------------------------------
+# Run full pipeline on Windows (loads data, trains Irish + Domain, runs pytest, builds reports):
+.\run_all.bat
+
+# Run full pipeline on Linux / macOS:
+bash run_all.sh
+
+------------------------------------------------------------------------------
+3. RUN STEP-BY-STEP ON IRISH DATASET
+------------------------------------------------------------------------------
+# Step 3.1: Inspect Irish dataset loading, shape, columns, and missing values:
+python src/load_data.py
+(Loads data/irish/Iris.csv, drops Id column, handles nulls, and prints shapes)
+
+# Step 3.2: Train models on Irish dataset and log 3 runs to MLflow:
+python src/train.py
+(Runs RandomForest depth 2, RandomForest depth 5, and LogisticRegression under 'irish_classification')
+
+# Step 3.3: Generate Evidently drift and performance HTML reports for Irish dataset:
+python src/drift_report.py
+(Creates reports/irish_drift.html and reports/irish_performance.html, and logs them to MLflow)
+
+------------------------------------------------------------------------------
+4. RUN ON SECOND DOMAIN DATASET (HEALTHCARE / HEART DISEASE)
+------------------------------------------------------------------------------
+# Step 4.1: Inspect Domain dataset loading:
+python -c "import sys; sys.path.insert(0, 'src'); from load_data import inspect_dataset; inspect_dataset('domain')"
+(Inspects data/domain/heart_disease.csv, features, and target distribution)
+
+# Step 4.2: Train models on Domain dataset and log 3 runs to MLflow:
+python -c "import sys; sys.path.insert(0, 'src'); from train import run_experiment_suite; run_experiment_suite('domain')"
+(Logs 3 training runs to MLflow under experiment 'domain_heart_disease')
+
+# Step 4.3: Generate Evidently HTML reports for Domain dataset:
+python -c "import sys; sys.path.insert(0, 'src'); from drift_report import run_and_log_reports; run_and_log_reports('domain')"
+(Creates reports/domain_drift.html and reports/domain_performance.html, and logs to MLflow)
+
+------------------------------------------------------------------------------
+5. AUTOMATED TESTS (PYTEST)
+------------------------------------------------------------------------------
+# Run all automated tests in verbose mode:
+pytest -v
+(Runs 3 data integrity tests and 2 model quality tests; all must show PASSED)
+
+# Run tests showing stdout console printouts:
+pytest -v -s
+(Shows majority class baseline accuracy vs trained model accuracy in terminal)
+
+# Run only data validation tests:
+pytest tests/test_data.py -v
+(Validates target nulls, expected columns, and train-test index disjointness)
+
+# Run only model validation tests:
+pytest tests/test_model.py -v
+(Validates prediction array length and confirms model outperforms naive baseline)
+
+------------------------------------------------------------------------------
+6. MLFLOW TRACKING USER INTERFACE
+------------------------------------------------------------------------------
+# Launch the MLflow local web UI server:
+mlflow ui
+(Starts local web server at http://127.0.0.1:5000)
+
+# Launch MLflow UI on an alternative port (e.g. 5001 if port 5000 is occupied):
+mlflow ui --port 5001
+(Starts web server on port 5001)
+
+------------------------------------------------------------------------------
+7. VIEWING SAVED EVIDENTLY REPORTS
+------------------------------------------------------------------------------
+# View files in reports folder on Windows:
+dir reports
+
+# Open the Irish Data Drift HTML report in default browser on Windows:
+start reports/irish_drift.html
+
+# Open the Irish Model Performance HTML report in default browser on Windows:
+start reports/irish_performance.html
+
+# Open the Domain Data Drift HTML report in default browser on Windows:
+start reports/domain_drift.html
+
+# Open the Domain Model Performance HTML report in default browser on Windows:
+start reports/domain_performance.html
+
+------------------------------------------------------------------------------
+8. TROUBLESHOOTING COMMON LAB ISSUES
+------------------------------------------------------------------------------
+# If PowerShell blocks script activation (ExecutionPolicy error):
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+(Allows activating .venv in the current PowerShell terminal session)
+
+# If port 5000 is already in use by another application:
+mlflow ui --port 5050
+(Runs MLflow on port 5050 instead)
+
+# If pytest cannot find modules in src directory:
+python -m pytest -v
+(Invokes pytest using the current Python environment and auto-adds project root to PYTHONPATH)
+
+# If packages report incompatible versions:
+pip install -r requirements.txt --force-reinstall
+(Reinstalls the tested working dependencies)
+==============================================================================
+

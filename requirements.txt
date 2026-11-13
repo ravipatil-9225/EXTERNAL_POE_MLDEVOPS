@@ -1,0 +1,8 @@
+# Pinned requirements for ML DevOps POE project
+mlflow==3.18.0
+pytest==9.2.0
+evidently==0.7.23
+pandas==2.2.3
+scikit-learn==1.4.2
+numpy==1.26.4
+

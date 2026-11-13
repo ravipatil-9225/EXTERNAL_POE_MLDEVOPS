@@ -1,0 +1,21 @@
+# Python virtual environment (MUST NOT be committed - huge and machine-specific)
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache & bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pytest_cache/
+
+# MLflow local database & run cache (will be generated fresh on college PC)
+mlruns/
+mlflow.db
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
